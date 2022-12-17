@@ -4,7 +4,6 @@ import Avatar from '../img/avatar.png'
 import {Link} from "react-router-dom"
 import { MdShoppingBasket, MdAdd, MdLogout } from "react-icons/md";
 import { motion } from 'framer-motion';
-//import { Link } from 'react-router-dom';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {app} from '../firebase.config'
 import { useStateValue } from '../context/StateProvider';
@@ -113,10 +112,20 @@ const Header = () => {
 
         {/* mobile */}
         <div className='flex items-center justify-between md:hidden w-full h-full'>
+
+        <div className='relative 
+                 flex items-center justify-center '>
+                <MdShoppingBasket  className='text-textColor text-2xl  cursor-pointer'/>
+                <div className='absolute -top-2 -right-2 w-5 h-5 rounded-full bg-cartNumBg flex items-center justify-center'>
+                  <p className='text-xs text-white font-semibold'>2</p>
+                </div>
+            </div>
+
         <Link to={'/'}className='flex items-center gap-2'>
                 <img src={Logo} className="w-8 object-cover" alt="logo"/>
                 <p className='text-headingColor text-xl font-bold'>City</p>
             </Link>
+            
             
 
             <div className='relative'>
@@ -142,6 +151,8 @@ const Header = () => {
                     New Item <MdAdd /></p>
                 </Link>
                 )}
+
+                
                 
 
             <ul className='flex flex-col'>
