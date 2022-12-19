@@ -4,8 +4,10 @@ module.exports = {
   theme: {
     extend: {
       width: {
+        125: "125px",
         150: "150px",
         190: "190px",
+        210: "210px",
         225: "225px",
         275: "275px",
         300: "300px",
@@ -33,6 +35,7 @@ module.exports = {
         "90vh": "90vh",
       },
       minWidth: {
+        190: "190px",
         210: "210px",
         350: "350px",
         620: "620px",
