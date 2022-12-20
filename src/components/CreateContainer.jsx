@@ -1,8 +1,12 @@
+import { upload } from '@testing-library/user-event/dist/upload';
+import { ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
-import { useState ,motion} from 'react';
-import { MdFastfood ,MdCloudUpload} from 'react-icons/md';
+import { setIsLoading, useState ,motion} from 'react';
+import { MdFastfood ,MdCloudUpload , MdDelete ,MdFoodBank ,MdAttachMoney} from 'react-icons/md';
+import { storage } from '../firebase.config';
 import {categories} from '../utils/data'
 import Loader from './Loader';
+
 
 
 const CreateContainer = () => {
@@ -14,11 +18,28 @@ const [category, setcategory] = useState(null);
 const [imageAsset, setImageAsset] = useState(null)
 const [fields, setfields] = useState(false);
 const [alertStatus, setalertStatus] = useState("danger");
-const [msg, setmsg] = useState(null);
+const [msg, setMsg] = useState(null);
 const [isLoading, setLoading] = useState(false);
 
 
-const uploadimage = () => {}
+const uploadimage = (e) => {
+  setIsLoading(true);
+  const imageFile = e.target.files[0];
+  const storageRef = ref(storage, 'Images/${Date.now()}-${imageFile.name}')
+  const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+  uploadTask.on('state_changed', (snapshot) => {
+    const uploadProgress =(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  }, (error) => {
+    console.log(error);
+    setfields(true),
+    setMsg('Error while uploading : try Again')
+  }, () => {})
+};
+
+const deleteImage = () => {}
+
+const saveDetails = () => {}
 
 
   return (
@@ -51,7 +72,7 @@ const uploadimage = () => {}
               value={title} 
               onChange={(e) => setTitle(e.target.value)}
               placeholder='Give me a title'
-              className='w-full h-full text-lg bg-transparent font-semibold 
+              className='w-full h-full text-lg bg-transparent 
               outline-none border-none placeholder:text-gray-400
               text-textColor'/>
           </div>
@@ -80,8 +101,12 @@ const uploadimage = () => {}
           border-2 border-dotted border-gray-300 w-full h-225 md:h-420
           cursor-pointer rounded-lg'>
 
-            {isLoading ? <Loader /> : <>
-                {!imageAsset ? <>
+            {isLoading ? (
+
+            <Loader />) :( <>
+                {!imageAsset ? (
+                <>
+
                 <label className='w-full h-full flex flex-col items-center 
                 justify-center cursor-pointer'>
                   <div className='w-full h-full flex flex-col items-center 
@@ -96,18 +121,75 @@ const uploadimage = () => {}
                 name='uploadimage' 
                 accept='image/*' 
                 onChange={uploadimage}
-                className="w-0 h-0"/>
-                </label>
-                
-                </> : <></>}
-            
-            </>} 
+                className="w-0 h-0"
+                />
+                </label> 
+               </> 
+                ):( 
+                <><div className='relative h-full'>
+                  <img 
+                  src={imageAsset} 
+                  alt="uploaded image"
+                  className='w-full h-full object-cover'
+                  />
+                  <button type='button' className='absolute bottom-3
+                  right-3 p-3 rounded-full bg-red-500 text-xl
+                  cursor-pointer outline-none hove:shadow-md 
+                  duration-500 transition-all ease-in-out'
+                  onClick={deleteImage}
+                  >
+                    <MdDelete className='text-white' />
+                  </button>
+                  </div></>
+                  )}  
+            </>
+          )} 
+          </div>
 
+          <div className='w-full flex flex-col md:flex-row items-center gap-3'>
+            <div className='w-full py-2 border-b border-gray-300 flex
+            items-center gap-2'>
+              <MdFastfood 
+              className='text-gray-700 text-2xl'/>
 
+              <input 
+              type="text" 
+              required 
+              value={calories}
+              onChange={(e) => setcalories(e.target.value)}
+              placeholder='Calories' 
+              className='w-full h-full text-lg bg-transparent outline-none border-none 
+              placeholder:text-gray-400 text-textColor'/>
+            </div>
+            <div>
+            <div className='w-full py-2 border-b border-gray-300 flex
+            items-center gap-2'>
+
+              <MdAttachMoney className='text-gray-700 text-2xl'/>
+              <input 
+              type="text" 
+              required 
+              value={price}
+              onChange={(e) => setprice(e.target.value)}
+              placeholder='Price' 
+              className='w-full h-full text-lg bg-transparent outline-none border-none 
+              placeholder:text-gray-400 text-textColor'/>
+            </div>
+            </div>
+          </div>
+
+          <div className='flex items-center w-full'>
+            <button type='button' className='ml-0 md:ml-auto w-full md:w-auto
+            border-none outline-none bg-emerald-500 px-12 py-2 rounded-lg
+            text-lg text-white font-semibold ' 
+            onClick={saveDetails}> 
+
+            Save
+            </button>
           </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default CreateContainer
