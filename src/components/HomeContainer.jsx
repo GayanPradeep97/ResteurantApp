@@ -51,6 +51,7 @@ const HomeContainer = () => {
 
       </div>
       <div className='flex-2 flex items-center justify-center relative'>
+
         <img src={Herobg} className="ml-auto h-420 w-full lg:w-auto lg:h-650" alt="hero-bg"/>
 
         <div className='w-full h-full absolute top-0 left-0 flex items-center justify-center 
@@ -59,7 +60,7 @@ const HomeContainer = () => {
             {heroData && heroData.map(n =>(
 
                 <div key={n.id} className=' lg:w-190 p-4 bg-cardOverlay backdrop-blur-md rounded-3xl 
-                 flex flex-col  items-center justify-center'>
+                 flex flex-col  items-center justify-center '>
     
                     <img src={n.imageSrc} className=" w-20 lg:w-40 -mt-10 lg:-mt-20 " alt="I1"/>
     
