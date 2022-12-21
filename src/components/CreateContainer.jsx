@@ -1,8 +1,8 @@
-import { upload } from '@testing-library/user-event/dist/upload';
-import { ref, uploadBytesResumable } from 'firebase/storage';
+//import { upload } from '@testing-library/user-event/dist/upload';
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
 import { setIsLoading, useState ,motion} from 'react';
-import { MdFastfood ,MdCloudUpload , MdDelete ,MdFoodBank ,MdAttachMoney} from 'react-icons/md';
+import { MdFastfood ,MdCloudUpload , MdDelete  ,MdAttachMoney} from 'react-icons/md';
 import { storage } from '../firebase.config';
 import {categories} from '../utils/data'
 import Loader from './Loader';
@@ -18,26 +18,61 @@ const [category, setcategory] = useState(null);
 const [imageAsset, setImageAsset] = useState(null)
 const [fields, setfields] = useState(false);
 const [alertStatus, setalertStatus] = useState("danger");
-const [msg, setMsg] = useState(null);
-const [isLoading, setLoading] = useState(false);
+const [msg, setmsg] = useState(null);
+const [isLoading, setIsLoading] = useState(false);
 
 
 const uploadimage = (e) => {
   setIsLoading(true);
   const imageFile = e.target.files[0];
-  const storageRef = ref(storage, 'Images/${Date.now()}-${imageFile.name}')
+  const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`)
   const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
-  uploadTask.on('state_changed', (snapshot) => {
-    const uploadProgress =(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  }, (error) => {
+
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      const uploadProgress =
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  }, 
+  (error) => {
     console.log(error);
-    setfields(true),
-    setMsg('Error while uploading : try Again')
-  }, () => {})
+    setfields(true);
+    setmsg('Error while uploading : Try Again ');
+    setalertStatus('danger');
+    setTimeout(() => {
+      setfields(false);
+      setIsLoading(false);
+    }, 4000);
+  }, 
+  () => {
+    getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+      setImageAsset(downloadURL);
+      setIsLoading(false);
+      setfields(true);
+      setmsg('Image uploaded successfully');
+      setalertStatus('success');
+      setTimeout(()=> {
+        setfields(false);
+     }, 4000);
+    });
+  })
 };
 
-const deleteImage = () => {}
+const deleteImage = () => {
+  setIsLoading(true);
+  const deletRef = ref(storage, imageAsset);
+  deleteObject(deletRef).then(() => {
+    setImageAsset(null);
+    setIsLoading(false);
+    setfields(true);
+      setmsg("Image deleted sucessfully ");
+      setalertStatus("success");
+      setTimeout(()=>{
+        setfields(false)
+      },4000);
+  })
+}
 
 const saveDetails = () => {}
 
@@ -127,7 +162,7 @@ const saveDetails = () => {}
                </> 
                 ):( 
                 <><div className='relative h-full'>
-                  <img 
+                  <image 
                   src={imageAsset} 
                   alt="uploaded image"
                   className='w-full h-full object-cover'
