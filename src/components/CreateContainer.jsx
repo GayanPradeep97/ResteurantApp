@@ -1,15 +1,17 @@
-//import { upload } from '@testing-library/user-event/dist/upload';
+import { upload } from '@testing-library/user-event/dist/upload';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
-import { setIsLoading, useState ,motion} from 'react';
+import { setIsLoading, useState } from 'react';
+import { motion } from "framer-motion";
 import { MdFastfood ,MdCloudUpload , MdDelete  ,MdAttachMoney} from 'react-icons/md';
 import { storage } from '../firebase.config';
 import {categories} from '../utils/data'
+import { saveItem } from '../utils/firebasefunction';
 import Loader from './Loader';
 
 
 
-const CreateContainer = () => {
+const CreateContainer =  () => {
 
 const [title, setTitle] = useState("");
 const [calories, setcalories] = useState("");
@@ -32,9 +34,8 @@ const uploadimage = (e) => {
   uploadTask.on(
     "state_changed",
     (snapshot) => {
-      const uploadProgress =
-        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  }, 
+      const uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    },
   (error) => {
     console.log(error);
     setfields(true);
@@ -46,17 +47,21 @@ const uploadimage = (e) => {
     }, 4000);
   }, 
   () => {
-    getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-      setImageAsset(downloadURL);
-      setIsLoading(false);
-      setfields(true);
-      setmsg('Image uploaded successfully');
-      setalertStatus('success');
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+       setImageAsset(downloadURL);
+       setIsLoading(false);
+       setfields(true);
+       setmsg('Image uploaded successfully');
+       setalertStatus('success');
       setTimeout(()=> {
         setfields(false);
      }, 4000);
     });
-  })
+  }
+
+ 
+
+  )
 };
 
 const deleteImage = () => {
@@ -74,29 +79,79 @@ const deleteImage = () => {
   })
 }
 
-const saveDetails = () => {}
+const saveDetails = () => {
+  setIsLoading(true);
+  try{
+    if((!title || !calories || !imageAsset || !price || !category)){
+      
+      setfields(true);
+      setmsg('Required field cant be empty ');
+      setalertStatus('danger');
+      setTimeout(() => {
+        setfields(false);
+        setIsLoading(false);
+      }, 4000);
+    }else{
+      const data = {
+        id: '$(Date.now())',
+        title :title,
+        imageURL :imageAsset,
+        category : category,
+        qty : 1,
+        price : price
+      }
+      saveItem(data)
+      setIsLoading(false);
+      setfields(true);
+      setmsg("Data Uploaded sucessfully ");
+      clearData();
+      setalertStatus("success");
+      setTimeout(()=>{
+        setfields(false)
+        
+      },4000);
+    }
+
+  } catch(error){
+    console.log(error);
+    setfields(true);
+    setmsg('Error while uploading : Try Again ');
+    setalertStatus('danger');
+    setTimeout(() => {
+      setfields(false);
+      setIsLoading(false);
+    }, 4000);
+  }
+};
+
+const clearData = () => {
+  setTitle("");
+  setImageAsset();
+  setcalories("");
+  setprice("");
+  setcalories("Select Category")
+}
 
 
   return (
     <div className='w-full min-h-screen flex items-center justify-center'>
 
       <div className='w-[90%] md:w-[75%] border border-gray-300 rounded-lg p-4
-      flex flex-col items-center justify-center gap-4'>
-        {
-          fields && (
-          <motion.p 
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
-            className= {`w-full p-2 rounded-lg text-center font-semibold ${
+      flex flex-col items-center justify-center gap-2'>
+       {fields && (
+          <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className={`w-full p-2 rounded-lg text-center text-lg font-semibold ${
             alertStatus === "danger"
-            ? "bg-red-400 text-red-800"
-            : "bg-emerald-400 text-emerald-800"
-        }`}
+              ? "bg-red-400 text-red-800"
+              : "bg-emerald-400 text-emerald-800"
+          }`}
         >
-            {msg}
-            </motion.p>
-          )}
+          {msg}
+        </motion.p>
+        )}
 
           <div className='w-full py-2 border-b border-gray-300 flex
           items-center gap-2'>
@@ -162,11 +217,11 @@ const saveDetails = () => {}
                </> 
                 ):( 
                 <><div className='relative h-full'>
-                  <image 
-                  src={imageAsset} 
-                  alt="uploaded image"
-                  className='w-full h-full object-cover'
-                  />
+                  <img
+                      src={imageAsset}
+                      alt="uploaded image"
+                      className="w-full h-full object-cover"
+                    />
                   <button type='button' className='absolute bottom-3
                   right-3 p-3 rounded-full bg-red-500 text-xl
                   cursor-pointer outline-none hove:shadow-md 
