@@ -96,7 +96,7 @@ const saveDetails = () => {
       }, 4000);
     }else{
       const data = {
-        id: '$(Date.now())',
+        id: (Date.now()),
         title :title,
         imageURL :imageAsset,
         category : category,
@@ -192,7 +192,8 @@ const fetchData = async () => {
                 </option>
               {categories && 
               categories.map((item) => (
-                <option key={item.id} className="text-base-border-0 
+                <option 
+                key={item.id} className="text-base-border-0 
                 outline-none capitalize bg-white text-headingColor"
                 value={item.urlParaName}
                 >

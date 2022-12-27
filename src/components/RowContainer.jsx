@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useRef ,useEffect} from 'react'
 import {MdShoppingBasket} from 'react-icons/md'
 import {motion } from 'framer-motion'
 
 
 
-const RowContainer = ({flag, data}) => {
-  console.log(data);
+const RowContainer = ({flag, data, scrollValue}) => {
+  
+  const rowContainer = useRef();
+  useEffect(() => {
+    rowContainer.current.scrollLeft += scrollValue;
+  },[scrollValue]);
+
   return (
     <div 
-      className={`w-full my-12 gap-3 flex items-center ${ 
-      flag ? "overflow-x-scroll" : "overflow-x-hidden flex-wrap"
+    ref={rowContainer}
+      className={`w-full my-12 gap-3 flex items-center scroll-smooth ${ 
+      flag 
+      ? "overflow-x-scroll scrollbar-none" 
+      : "overflow-x-hidden flex-wrap"
     }`}
     >
       {data && 
@@ -24,7 +32,9 @@ const RowContainer = ({flag, data}) => {
            className='w-full flex items-center justify-between'>
             <motion.img 
             whileTap={{scale:1.2}}
-            src="https://firebasestorage.googleapis.com/v0/b/restaurantapp-354f5.appspot.com/o/Images%2F1672125014129-f8.png?alt=media&token=1c98097e-7ae5-408a-a3bc-02eb48762877"            className='w-40 -mt-8 drop-shadow-2xl'/>
+            src={item?.imageURL}            
+            alt=''
+            className='w-40 -mt-8 drop-shadow-2xl'/>
   
             <motion.div 
             whileTap={{scale:0.75}}
@@ -36,12 +46,12 @@ const RowContainer = ({flag, data}) => {
   
            <div className='w-full flex flex-col items-end justify-end'>
             <p className='text-textColor font-semibold text-base md:text-lg'>
-              Chocolate & Vanilla
+              {item?.title}
               </p>
-              <p className='mt-1 text-sm text-gray-500'>45 calories</p>
+              <p className='mt-1 text-sm text-gray-500'>{item?.calories}</p>
               <div className='flex items-center judtify-center gap-8'>
                 <p className='text-lg text-headingColor font-semibold'>
-                  <span className='text-sm text-red-500'>$</span>5.25
+                  <span className='text-sm text-red-500'>$</span>{item?.price}
                 </p>
               </div>
            </div>
