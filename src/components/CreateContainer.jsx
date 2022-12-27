@@ -1,7 +1,7 @@
 import { upload } from '@testing-library/user-event/dist/upload';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import React from 'react'
-import { setIsLoading, useState,useStateValue } from 'react';
+import { setIsLoading, useState} from 'react';
 import { motion } from "framer-motion";
 import { MdFastfood ,MdCloudUpload , MdDelete  ,MdAttachMoney} from 'react-icons/md';
 import { storage } from '../firebase.config';
@@ -9,6 +9,7 @@ import {categories} from '../utils/data'
 import { getAllFoodItems, saveItem } from '../utils/firebasefunction';
 import Loader from './Loader';
 import { actionType } from '../context/reducer';
+import { useStateValue } from '../context/StateProvider';
 
 
 
@@ -112,6 +113,7 @@ const saveDetails = () => {
         setfields(false)
         
       },4000);
+      clearData();
     }
 
   } catch(error){
@@ -124,6 +126,8 @@ const saveDetails = () => {
       setIsLoading(false);
     }, 4000);
   }
+
+  fetchData();
 };
 
 const clearData = () => {
