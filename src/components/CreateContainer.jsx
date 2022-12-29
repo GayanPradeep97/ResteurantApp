@@ -62,8 +62,6 @@ const uploadimage = (e) => {
     });
   }
 
- 
-
   )
 };
 
@@ -96,12 +94,13 @@ const saveDetails = () => {
       }, 4000);
     }else{
       const data = {
-        id: (Date.now()),
+        id: `${Date.now()}`, 
         title :title,
         imageURL :imageAsset,
-        category : category,
+        category :category,
+        calories: calories,
         qty : 1,
-        price : price
+        price :price
       }
       saveItem(data)
       setIsLoading(false);
@@ -193,7 +192,8 @@ const fetchData = async () => {
               {categories && 
               categories.map((item) => (
                 <option 
-                key={item.id} className="text-base-border-0 
+                key={item.id} 
+                className="text-base-border-0 
                 outline-none capitalize bg-white text-headingColor"
                 value={item.urlParaName}
                 >
@@ -233,8 +233,7 @@ const fetchData = async () => {
                </> 
                 ):( 
                 <><div className='relative h-full'>
-                  <img
-                      src={imageAsset}
+                  <img src={imageAsset}
                       alt="uploaded image"
                       className="w-full h-full object-cover"
                     />
@@ -288,8 +287,7 @@ const fetchData = async () => {
             <button type='button' className='ml-0 md:ml-auto w-full md:w-auto
             border-none outline-none bg-emerald-500 px-12 py-2 rounded-lg
             text-lg text-white font-semibold ' 
-            onClick={saveDetails}> 
-
+            onClick={saveDetails}>
             Save
             </button>
           </div>
