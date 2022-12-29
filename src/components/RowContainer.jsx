@@ -17,7 +17,7 @@ const RowContainer = ({flag, data, scrollValue}) => {
       className={`w-full my-12 gap-3 flex items-center scroll-smooth ${ 
       flag 
       ? "overflow-x-scroll scrollbar-none" 
-      : "overflow-x-hidden flex-wrap"
+      : "overflow-x-hidden flex-wrap justify-center"
     }`}
     >
       

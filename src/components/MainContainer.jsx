@@ -32,8 +32,7 @@ const MainContainer = () => {
           <div className='hidden md:flex gap-3 items-center'>
             <motion.div 
             whileTap={{scale:0.75}}
-            className='w-8 h-8 rounded-lg bg-orange-300  hover:bg-orange-500 cursor-pointer transition-all 
-            duration-100 ease-out flex items-center justify-center'
+            className='w-8 h-8 rounded-lg bg-orange-300  hover:bg-orange-500 cursor-pointer  flex items-center justify-center'
             onClick={()=> setscrollValue(-200)}
             
             >
