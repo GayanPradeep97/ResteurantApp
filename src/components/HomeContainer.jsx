@@ -8,7 +8,7 @@ const HomeContainer = () => {
   return (
     <section className='grid grid-cols-1 md:grid-cols-2 gap-2 w-full' id='home'>
 
-      <div className='py-1 flex flex flex-col items-start 
+      <div className='py-1 flex flex flex-col items-end 
       justify-center gap-6'>
 
         <div className='flex items-center gap-2 justify-start bg-orange-200
@@ -60,7 +60,7 @@ const HomeContainer = () => {
             {heroData && heroData.map(n =>(
 
                 <div key={n.id} className=' lg:w-190 p-4 bg-cardOverlay backdrop-blur-md rounded-3xl 
-                 flex flex-col  items-center justify-center '>
+                 flex flex-col  items-end justify-center '>
     
                     <img src={n.imageSrc} className=" w-20 lg:w-40 -mt-10 lg:-mt-20 " alt="I1"/>
     
