@@ -9,7 +9,7 @@ import EmptyCart from "../img/emptyCart.svg";
 import CartItem from "./CartItem";
 
 const CartContainer = () => {
-    const [{user, cartShow, cartItems},dispatch] = useStateValue();
+  const [{user, cartShow, cartItems},dispatch] = useStateValue();
   const [flag, setFlag] = useState(1);
   const [tot, setTot] = useState(0);
 

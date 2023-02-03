@@ -8,7 +8,7 @@ const HomeContainer = () => {
   return (
     <section className='grid grid-cols-1 md:grid-cols-2 gap-2 w-full' id='home'>
 
-      <div className='py-1 flex flex flex-col items-end 
+      <div className='py-1 flex flex flex-col items-start 
       justify-center gap-6'>
 
         <div className='flex items-center gap-2 justify-start bg-orange-200
